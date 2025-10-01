@@ -1,0 +1,16 @@
+// states.ts (sin cambios, pero lo incluyo por completitud)
+export const STATES = {
+  NEW: "New",
+  READY: "Ready",
+  RUNNING: "Running",
+  BLOCKED: "Blocked",
+  TERMINATED: "Terminated",
+};
+
+export const VALID_TRANSITIONS = {
+  [STATES.NEW]: [STATES.READY],
+  [STATES.READY]: [STATES.RUNNING],
+  [STATES.RUNNING]: [STATES.READY, STATES.BLOCKED, STATES.TERMINATED],
+  [STATES.BLOCKED]: [STATES.READY],
+  [STATES.TERMINATED]: [],
+};
