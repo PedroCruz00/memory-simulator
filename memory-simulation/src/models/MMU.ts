@@ -1,5 +1,4 @@
 import { ClockAlgorithm } from "./ClockAlgorithm";
-import { STATES } from "../constants/states";
 import { RAM } from "./RAM";
 import { Disk } from "./Disk";
 import { Process } from "./Process";
@@ -26,7 +25,7 @@ export class MMU {
   clock: ClockAlgorithm;
   pageTable: Map<number, Map<number, number | "disk">>;
 
-  constructor(ram: RAM, disk: Disk, frames: number) {
+  constructor(ram: RAM, disk: Disk) {
     this.ram = ram;
     this.disk = disk;
     // Filtrar solo frames no nulos y con page definido para el ClockAlgorithm

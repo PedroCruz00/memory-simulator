@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { MemorySimulator } from "./components/MemorySimulator";
 import "./App.css";
 
 function App() {
-  return <></>;
+  return <MemorySimulator />;
 }
 
 export default App;

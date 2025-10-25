@@ -1,4 +1,3 @@
-// states.ts (sin cambios, pero lo incluyo por completitud)
 export const STATES = {
   NEW: "New",
   READY: "Ready",

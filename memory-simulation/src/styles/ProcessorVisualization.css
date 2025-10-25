@@ -1,0 +1,145 @@
+.processor-visualization {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.processor-visualization h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 10px;
+}
+
+.processor-status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.status-item {
+  background: rgba(0, 0, 0, 0.1);
+  border-left: 4px solid;
+  padding: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.status-item.current {
+  border-left-color: #2ecc71;
+}
+
+.status-item.ready {
+  border-left-color: #3498db;
+}
+
+.status-item.blocked {
+  border-left-color: #e74c3c;
+}
+
+.status-item h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+}
+
+.process-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.process-card p {
+  margin: 5px 0;
+}
+
+.queue-visual {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.queue-process {
+  background: #3498db;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.queue-process:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5);
+}
+
+.queue-process.blocked {
+  background: #e74c3c;
+}
+
+.pid {
+  display: inline-block;
+}
+
+.empty {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.process-states {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.process-states h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.states-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.state-badge {
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.state-badge:hover {
+  transform: scale(1.05);
+}
+
+.badge-pid {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
+
+.badge-state {
+  font-size: 0.8em;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .processor-status {
+    grid-template-columns: 1fr;
+  }
+
+  .states-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+}

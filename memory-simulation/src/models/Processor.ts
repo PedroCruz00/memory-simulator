@@ -18,7 +18,7 @@ export class Processor {
     this.blockedQueue = []; // Queue of blocked processes
     this.currentProcess = null; // Currently running process
     this.autoScheduling = false; // Auto-scheduling flag
-    this.mmu = new MMU(ram, disk, ram.numFrames); // Initialize MMU with RAM and Disk
+    this.mmu = new MMU(ram, disk); // Initialize MMU with RAM and Disk
   }
 
   // Admit a new process to the system
