@@ -1,25 +1,28 @@
 .simulator-controls {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: #ffffff;
   border-radius: 12px;
   padding: 20px;
   color: #333;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
 }
 
 .control-section {
-  background: white;
+  background: #f8f9fa;
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #1e3c72;
 }
 
 .control-section h3 {
   margin-top: 0;
   margin-bottom: 12px;
-  color: #333;
-  border-bottom: 2px solid #4facfe;
+  color: #1e3c72;
+  border-bottom: 2px solid #e0e0e0;
   padding-bottom: 8px;
+  font-weight: 600;
 }
 
 .config-group {
@@ -42,12 +45,13 @@
   border-radius: 6px;
   font-size: 0.95em;
   transition: all 0.3s ease;
+  background: white;
 }
 
 .config-group input:focus {
   outline: none;
-  border-color: #4facfe;
-  box-shadow: 0 0 8px rgba(79, 172, 254, 0.3);
+  border-color: #2a5298;
+  box-shadow: 0 0 8px rgba(42, 82, 152, 0.2);
 }
 
 .button-group {
@@ -86,57 +90,57 @@
 }
 
 .btn-primary {
-  background: #4facfe;
+  background: #1e3c72;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2d7dd6;
+  background: #2a5298;
 }
 
 .btn-success {
-  background: #2ecc71;
+  background: #16a085;
   color: white;
 }
 
 .btn-success:hover:not(:disabled) {
-  background: #27ae60;
+  background: #1abc9c;
 }
 
 .btn-warning {
-  background: #f39c12;
+  background: #e67e22;
   color: white;
 }
 
 .btn-warning:hover:not(:disabled) {
-  background: #d68910;
+  background: #d35400;
 }
 
 .btn-info {
-  background: #3498db;
+  background: #2980b9;
   color: white;
 }
 
 .btn-info:hover:not(:disabled) {
-  background: #2980b9;
+  background: #3498db;
 }
 
 .btn-danger {
-  background: #e74c3c;
+  background: #c0392b;
   color: white;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #c0392b;
+  background: #e74c3c;
 }
 
 .btn-secondary {
-  background: #95a5a6;
+  background: #7f8c8d;
   color: white;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #7f8c8d;
+  background: #95a5a6;
 }
 
 .process-config {
@@ -161,8 +165,8 @@
 
 .process-config input[type="number"]:focus {
   outline: none;
-  border-color: #4facfe;
-  box-shadow: 0 0 8px rgba(79, 172, 254, 0.3);
+  border-color: #2a5298;
+  box-shadow: 0 0 8px rgba(42, 82, 152, 0.2);
 }
 
 .checkbox {
@@ -181,16 +185,17 @@
 
 .info-panel {
   background: white;
-  border-left: 4px solid #4facfe;
+  border-left: 4px solid #2a5298;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .info-panel h4 {
   margin-top: 0;
   margin-bottom: 10px;
-  color: #333;
+  color: #1e3c72;
+  font-weight: 600;
 }
 
 .info-panel p {

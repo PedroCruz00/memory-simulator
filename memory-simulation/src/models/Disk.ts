@@ -38,4 +38,22 @@ export class Disk {
   clearPages(processPid: number): void {
     this.pages.delete(processPid);
   }
+
+  // Obtener todas las páginas de un proceso (para visualización)
+  getProcessPages(processPid: number): Map<number, Page> | undefined {
+    return this.pages.get(processPid);
+  }
+
+  // Obtener información de todas las páginas en disco (para visualización)
+  getAllPagesInfo(): Array<{ processPid: number; pageCount: number; pageNumbers: number[] }> {
+    const info: Array<{ processPid: number; pageCount: number; pageNumbers: number[] }> = [];
+    this.pages.forEach((processPages, processPid) => {
+      info.push({
+        processPid,
+        pageCount: processPages.size,
+        pageNumbers: Array.from(processPages.keys()),
+      });
+    });
+    return info;
+  }
 }

@@ -1,9 +1,13 @@
 .ram-visualization {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   border-radius: 12px;
   padding: 20px;
   color: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .ram-visualization h3 {
@@ -12,6 +16,7 @@
   font-size: 1.5em;
   border-bottom: 2px solid rgba(255, 255, 255, 0.3);
   padding-bottom: 10px;
+  flex-shrink: 0;
 }
 
 .ram-stats {
@@ -20,6 +25,7 @@
   border-radius: 8px;
   margin-bottom: 15px;
   font-size: 0.9em;
+  flex-shrink: 0;
 }
 
 .ram-stats p {
@@ -30,12 +36,33 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
   gap: 8px;
-  margin-bottom: 20px;
-  max-height: 300px;
+  margin-bottom: 15px;
+  max-height: 350px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 10px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  flex: 1;
+}
+
+/* Scrollbar para frames de RAM */
+.ram-frames-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ram-frames-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.ram-frames-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.ram-frames-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .ram-frame {

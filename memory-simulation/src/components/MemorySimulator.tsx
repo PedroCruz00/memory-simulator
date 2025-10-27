@@ -4,6 +4,7 @@ import { SimulatorControls } from "./simulator/SimulatorControls";
 import { RAMVisualization } from "./simulator/RAMVisualization";
 import { ProcessorVisualization } from "./simulator/ProcessorVisualization";
 import { ProcessDetails } from "./simulator/ProcessDetails";
+import { DiskVisualization } from "./simulator/DiskVisualization";
 import "../styles/SimulatorLayout.css";
 
 export const MemorySimulator: React.FC = () => {
@@ -29,7 +30,8 @@ export const MemorySimulator: React.FC = () => {
 
   const handleAddProcess = () => {
     if (state.processor) {
-      addProcess(false);
+      // Pasar memorySize por defecto (8KB = 2 páginas de 4096 bytes)
+      addProcess(false, 8192);
     }
   };
 
@@ -72,6 +74,35 @@ export const MemorySimulator: React.FC = () => {
                   processor={state.processor}
                   processes={state.processes}
                 />
+              </div>
+            </div>
+
+            {/* Fila media: Disco y Estadísticas */}
+            <div className="visualizations-row">
+              <div className="visualization-box">
+                <DiskVisualization disk={state.disk} processes={state.processes} />
+              </div>
+              <div className="visualization-box">
+                <div className="statistics-panel">
+                  <h3>📊 Estadísticas</h3>
+                  <div className="stats-grid">
+                    <div className="stat-item">
+                      <span className="stat-label">Procesos Totales:</span>
+                      <span className="stat-value">{state.processes.length}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Frames en RAM:</span>
+                      <span className="stat-value">
+                        {state.ram?.frames.filter((f) => f !== null).length || 0} /{" "}
+                        {state.config.ramFrames}
+                      </span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Tiempo Actual:</span>
+                      <span className="stat-value">{state.currentTime} ms</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

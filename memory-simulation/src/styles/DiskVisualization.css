@@ -1,0 +1,144 @@
+.disk-visualization {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.disk-header {
+  margin-bottom: 15px;
+}
+
+.disk-header h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.disk-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9em;
+  opacity: 0.95;
+}
+
+.disk-stat {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.disk-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.disk-empty {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1em;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.disk-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.disk-process-block {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.disk-process-block:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.disk-process-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.disk-process-header strong {
+  font-size: 1em;
+  color: #2c3e50;
+}
+
+.disk-page-count {
+  background: rgba(52, 152, 219, 0.15);
+  color: #2980b9;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.disk-page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.disk-page-number {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-family: 'Courier New', monospace;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Scrollbar para el contenido del disco */
+.disk-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.disk-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.disk-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.disk-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animación para páginas que entran al disco */
+@keyframes slideInDisk {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.disk-process-block {
+  animation: slideInDisk 0.3s ease;
+}

@@ -1,4 +1,5 @@
 import { STATES, VALID_TRANSITIONS } from "../constants/states";
+import { PROCESS_COLORS } from "../constants/colors";
 import type { Page } from "./MMU";
 import type { MMU } from "./MMU";
 
@@ -13,6 +14,7 @@ export class Process {
   remainingTime: number;
   memorySize: number;
   pages: Page[];
+  color: string;
   stateHistory: Array<{
     state: string;
     timestamp: Date;
@@ -41,6 +43,7 @@ export class Process {
     this.remainingTime = Math.floor(Math.random() * 7000) + 3000; // CPU time (3-10s)
     this.memorySize = memorySize; // Memory size in bytes (4KB-36KB)
     this.pages = []; // Array of Page objects (initialized by MMU)
+    this.color = PROCESS_COLORS[pid % PROCESS_COLORS.length]; // Assign color based on PID
 
     this.stateHistory = [
       {

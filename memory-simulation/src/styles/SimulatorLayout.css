@@ -1,16 +1,18 @@
 .simulator-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  height: 100vh;
+  background: #f0f2f5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
 }
 
 .simulator-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   color: white;
-  padding: 30px 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
 }
 
 .header-content {
@@ -37,6 +39,9 @@
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .layout-grid {
@@ -44,21 +49,22 @@
   grid-template-columns: 1fr 2fr;
   gap: 20px;
   height: 100%;
+  overflow: hidden;
 }
 
 .column {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .controls-column {
-  max-height: 100%;
   overflow-y: auto;
 }
 
 .visualizations-column {
-  max-height: 100%;
   overflow-y: auto;
 }
 
@@ -85,13 +91,13 @@
 }
 
 .simulator-footer {
-  background: #2c3e50;
+  background: #1a252f;
   color: white;
   text-align: center;
   padding: 15px 20px;
   margin-top: auto;
   font-size: 0.9em;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .simulator-footer p {
@@ -119,6 +125,55 @@
 .controls-column::-webkit-scrollbar-thumb:hover,
 .visualizations-column::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+/* Panel de estadísticas */
+.statistics-panel {
+  padding: 20px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  border-radius: 12px;
+  min-height: 250px;
+}
+
+.statistics-panel h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(5px);
+}
+
+.stat-label {
+  font-size: 0.95em;
+  opacity: 0.9;
+}
+
+.stat-value {
+  font-size: 1.2em;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 6px;
 }
 
 /* Responsive */
