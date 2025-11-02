@@ -135,7 +135,10 @@ export const MemorySimulator: React.FC = () => {
 
             {/* Columna Derecha: Disco y Diagrama */}
             <div className="simulator-column simulator-column--right">
-              <DiskVisualization disk={state.disk} processes={state.processes} />
+              <DiskVisualization
+                disk={state.disk}
+                processes={state.processes}
+              />
               <ProcessFlowDiagram processes={state.processes} />
             </div>
           </div>
@@ -151,7 +154,11 @@ export const MemorySimulator: React.FC = () => {
           </div>
 
           <div className="simulator-details-container">
-            <ProcessDetails processes={state.processes} ram={state.ram} disk={state.disk} />
+            <ProcessDetails
+              processes={state.processes}
+              ram={state.ram}
+              disk={state.disk}
+            />
           </div>
         </>
       )}
@@ -164,7 +171,8 @@ export const MemorySimulator: React.FC = () => {
             </div>
             <h2 className="empty-state-title">Inicializa el Simulador</h2>
             <p className="empty-state-message">
-              Configura los parámetros del simulador y haz clic en "Inicializar" para comenzar.
+              Configura los parámetros del simulador y haz clic en "Inicializar"
+              para comenzar.
             </p>
           </div>
         </div>

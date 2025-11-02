@@ -35,81 +35,81 @@ export class Processor {
   schedule() {
     // Try to unblock processes first
     this.checkBlockedQueue();
-    
+
     // If there's a current process, continue or finish it
     if (this.currentProcess) {
       const p = this.currentProcess;
-      
+
       // Simulate execution: decrease remaining time
       p.remainingTime -= 500; // 500ms tick
-      
+
       // Access memory during execution (simulates work)
       this.simulateMemoryAccess(p);
-      
+
       // Check if process finished
       if (p.remainingTime <= 0) {
         p.transition(STATES.TERMINATED, "Proceso completado");
         this.mmu.freeProcessMemory(p);
         this.currentProcess = null;
-        
+
         // Schedule next
         if (this.readyQueue.length > 0) {
           this.schedule();
         }
         return;
       }
-      
+
       // Random I/O blocking (10% chance - menos bloqueos)
-      if (p.canBeBlocked() && Math.random() < 0.10) {
+      if (p.canBeBlocked() && Math.random() < 0.1) {
         p.transition(STATES.BLOCKED, "Operación de E/S");
         this.blockedQueue.push(p);
         this.currentProcess = null;
-        
+
         // Schedule next
         if (this.readyQueue.length > 0) {
           this.schedule();
         }
         return;
       }
-      
+
       // Context switch (10% chance - quantum expired)
-      if (Math.random() < 0.10) {
+      if (Math.random() < 0.1) {
         p.transition(STATES.READY, "Quantum expirado (context switch)");
         this.readyQueue.push(p);
         this.currentProcess = null;
-        
+
         // Schedule next
         if (this.readyQueue.length > 0) {
           this.schedule();
         }
         return;
       }
-      
+
       // Continue with current process
       return;
     }
-    
+
     // No current process, get next from ready queue
     if (this.readyQueue.length === 0) {
       return; // Nothing to do
     }
-    
+
     // Get next process from ready queue
     const nextProcess = this.readyQueue.shift();
     if (!nextProcess) return;
-    
+
     this.currentProcess = nextProcess;
     nextProcess.transition(STATES.RUNNING, "Asignado a CPU");
-    
+
     // Initial memory access
     this.simulateMemoryAccess(nextProcess);
   }
-  
+
   // Helper: Simulate memory access for a process
   private simulateMemoryAccess(process: Process) {
     const numPages = process.pages.length;
     if (numPages === 0) return;
-    
+
     const randomPage = Math.floor(Math.random() * numPages);
     try {
       process.simulateMemoryAccess(this.mmu, randomPage);
@@ -118,20 +118,20 @@ export class Processor {
       console.warn(`Memory access warning for PID ${process.pid}`);
     }
   }
-  
+
   // Helper: Check and unblock processes
   private checkBlockedQueue() {
     if (this.blockedQueue.length === 0) return;
-    
+
     // Unblock processes with 60% chance each tick (más probabilidad)
     const toUnblock: Process[] = [];
-    
+
     this.blockedQueue.forEach((p) => {
       if (Math.random() < 0.6) {
         toUnblock.push(p);
       }
     });
-    
+
     toUnblock.forEach((p) => {
       const index = this.blockedQueue.indexOf(p);
       if (index >= 0) {

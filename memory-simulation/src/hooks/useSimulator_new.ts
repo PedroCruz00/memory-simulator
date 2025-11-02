@@ -59,22 +59,13 @@ export const useSimulator = () => {
       // Create Processor with quantum (order: quantum, ram, disk)
       const processor = new Processor(newConfig.processorQuantum, ram, disk);
 
-      // Create initial processes
-      const initialProcesses: Process[] = [];
-      for (let i = 1; i <= 3; i++) {
-        const canBeBlocked = i % 2 === 0; // Every other process can be blocked
-        const process = new Process(i, canBeBlocked);
-        processor.admitProcess(process);
-        initialProcesses.push(process);
-      }
-
       setState((prev) => ({
         ...prev,
         processor,
         ram,
         disk,
         config: newConfig,
-        processes: initialProcesses,
+        processes: [],
         currentTime: 0,
         isRunning: false,
       }));
@@ -88,14 +79,11 @@ export const useSimulator = () => {
       setState((prev) => {
         if (!prev.processor) return prev;
 
-        // Find max PID and add 1
-        const maxPid = prev.processes.reduce(
-          (max, p) => Math.max(max, p.pid),
-          0
+        const newProcess = new Process(
+          prev.processes.length + 1,
+          canBeBlocked,
+          memorySize
         );
-        const newPid = maxPid + 1;
-
-        const newProcess = new Process(newPid, canBeBlocked, memorySize);
 
         // Add process to processor
         prev.processor.admitProcess(newProcess);

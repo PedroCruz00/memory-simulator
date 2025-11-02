@@ -23,11 +23,17 @@ interface ProcessDetailsProps {
   disk: Disk;
 }
 
-export const ProcessDetails: React.FC<ProcessDetailsProps> = ({ processes, ram, disk }) => {
+export const ProcessDetails: React.FC<ProcessDetailsProps> = ({
+  processes,
+  ram,
+  disk,
+}) => {
   const [filterState, setFilterState] = useState<string>("ALL");
 
   const filteredProcesses =
-    filterState === "ALL" ? processes : processes.filter((p) => p.state === filterState);
+    filterState === "ALL"
+      ? processes
+      : processes.filter((p) => p.state === filterState);
 
   const getProcessPagesInRAM = (pid: number): number => {
     return ram.frames.filter((f) => f?.processPid === pid).length;
@@ -76,7 +82,9 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({ processes, ram, 
             <button
               key={filter.value}
               className={`process-details__filter ${
-                filterState === filter.value ? "process-details__filter--active" : ""
+                filterState === filter.value
+                  ? "process-details__filter--active"
+                  : ""
               }`}
               onClick={() => setFilterState(filter.value)}
             >
@@ -104,7 +112,8 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({ processes, ram, 
             {filteredProcesses.length === 0 ? (
               <tr>
                 <td colSpan={8} className="process-details__empty">
-                  No hay procesos {filterState !== "ALL" && `en estado ${filterState}`}
+                  No hay procesos{" "}
+                  {filterState !== "ALL" && `en estado ${filterState}`}
                 </td>
               </tr>
             ) : (
@@ -130,11 +139,15 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({ processes, ram, 
                         {process.state}
                       </span>
                     </td>
-                    <td className="process-details__priority">{process.priority}</td>
+                    <td className="process-details__priority">
+                      {process.priority}
+                    </td>
                     <td className="process-details__memory">
                       {(process.memorySize / 1024).toFixed(1)} KB
                     </td>
-                    <td className="process-details__pages">{process.pages.length}</td>
+                    <td className="process-details__pages">
+                      {process.pages.length}
+                    </td>
                     <td className="process-details__ram">
                       <span className="process-details__badge process-details__badge--success">
                         {pagesInRAM}

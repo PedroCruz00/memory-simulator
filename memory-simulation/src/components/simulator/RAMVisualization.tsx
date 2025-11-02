@@ -48,7 +48,10 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
           <span
             className="ram-visualization__utilization"
             style={{
-              color: utilizationPercent > 80 ? "var(--danger-red)" : "var(--success-green)",
+              color:
+                utilizationPercent > 80
+                  ? "var(--danger-red)"
+                  : "var(--success-green)",
             }}
           >
             {utilizationPercent.toFixed(0)}%
@@ -81,10 +84,16 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
               <div
                 key={index}
                 className={`ram-visualization__frame ${
-                  isOccupied ? "ram-visualization__frame--occupied" : "ram-visualization__frame--free"
-                } ${isPointed ? "ram-visualization__frame--clock-pointer" : ""}`}
+                  isOccupied
+                    ? "ram-visualization__frame--occupied"
+                    : "ram-visualization__frame--free"
+                } ${
+                  isPointed ? "ram-visualization__frame--clock-pointer" : ""
+                }`}
                 style={{
-                  borderColor: isOccupied ? getProcessColor(frame.processPid) : "var(--border-primary)",
+                  borderColor: isOccupied
+                    ? getProcessColor(frame.processPid)
+                    : "var(--border-primary)",
                   background: isOccupied
                     ? `${getProcessColor(frame.processPid)}20`
                     : "var(--bg-tertiary)",
@@ -98,7 +107,9 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
                 )}
 
                 <div className="ram-visualization__frame-header">
-                  <span className="ram-visualization__frame-number">{index}</span>
+                  <span className="ram-visualization__frame-number">
+                    {index}
+                  </span>
                   {isOccupied && (
                     <span
                       className="ram-visualization__frame-pid"
@@ -113,13 +124,17 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
                   <div className="ram-visualization__frame-content">
                     <div className="ram-visualization__page-info">
                       <span className="ram-visualization__page-label">Pág</span>
-                      <span className="ram-visualization__page-number">{frame.page.pageNumber}</span>
+                      <span className="ram-visualization__page-number">
+                        {frame.page.pageNumber}
+                      </span>
                     </div>
 
                     <div className="ram-visualization__bits">
                       <div
                         className={`ram-visualization__bit ${
-                          frame.page.referenced === 1 ? "ram-visualization__bit--active" : ""
+                          frame.page.referenced === 1
+                            ? "ram-visualization__bit--active"
+                            : ""
                         }`}
                         title="Bit de Referencia"
                       >
@@ -127,7 +142,9 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
                       </div>
                       <div
                         className={`ram-visualization__bit ${
-                          frame.page.modified === 1 ? "ram-visualization__bit--active" : ""
+                          frame.page.modified === 1
+                            ? "ram-visualization__bit--active"
+                            : ""
                         }`}
                         title="Bit de Modificación"
                       >
@@ -142,7 +159,9 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
                   </div>
                 )}
 
-                {!isOccupied && <div className="ram-visualization__frame-empty">Libre</div>}
+                {!isOccupied && (
+                  <div className="ram-visualization__frame-empty">Libre</div>
+                )}
               </div>
             );
           })}

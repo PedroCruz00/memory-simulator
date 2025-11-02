@@ -93,9 +93,15 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
         {/* Arrow CPU to MMU */}
         <div
           className={`data-flow-visualization__arrow ${
-            activeFlow === "cpu-ram" ? "data-flow-visualization__arrow--active" : ""
+            activeFlow === "cpu-ram"
+              ? "data-flow-visualization__arrow--active"
+              : ""
           }`}
-          style={{ "--arrow-color": getEventColor(lastEvent?.type) } as React.CSSProperties}
+          style={
+            {
+              "--arrow-color": getEventColor(lastEvent?.type),
+            } as React.CSSProperties
+          }
         >
           <div className="data-flow-visualization__arrow-line" />
         </div>
@@ -121,7 +127,11 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
                   ? "data-flow-visualization__arrow--active"
                   : ""
               }`}
-              style={{ "--arrow-color": getEventColor(lastEvent?.type) } as React.CSSProperties}
+              style={
+                {
+                  "--arrow-color": getEventColor(lastEvent?.type),
+                } as React.CSSProperties
+              }
             >
               <div className="data-flow-visualization__arrow-line" />
             </div>
@@ -145,7 +155,11 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
                   ? "data-flow-visualization__arrow--active"
                   : ""
               }`}
-              style={{ "--arrow-color": getEventColor(lastEvent?.type) } as React.CSSProperties}
+              style={
+                {
+                  "--arrow-color": getEventColor(lastEvent?.type),
+                } as React.CSSProperties
+              }
             >
               <div className="data-flow-visualization__arrow-line" />
             </div>
@@ -156,7 +170,10 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
               </div>
               <span className="data-flow-visualization__node-label">Disco</span>
               <div className="data-flow-visualization__node-info">
-                {disk.getAllPagesInfo().reduce((sum, info) => sum + info.pageCount, 0)} pág.
+                {disk
+                  .getAllPagesInfo()
+                  .reduce((sum, info) => sum + info.pageCount, 0)}{" "}
+                pág.
               </div>
             </div>
           </div>
@@ -179,7 +196,8 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
             </span>
             <span className="data-flow-visualization__event-details">
               P{lastEvent.processPid} • Pág {lastEvent.pageNumber}
-              {lastEvent.frameNumber !== undefined && ` • Frame ${lastEvent.frameNumber}`}
+              {lastEvent.frameNumber !== undefined &&
+                ` • Frame ${lastEvent.frameNumber}`}
             </span>
           </div>
         </div>
@@ -190,23 +208,33 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
         <div className="data-flow-visualization__stat data-flow-visualization__stat--success">
           <Icons.CheckCircle />
           <div className="data-flow-visualization__stat-content">
-            <span className="data-flow-visualization__stat-label">Page Hits</span>
-            <span className="data-flow-visualization__stat-value">{pageHits}</span>
+            <span className="data-flow-visualization__stat-label">
+              Page Hits
+            </span>
+            <span className="data-flow-visualization__stat-value">
+              {pageHits}
+            </span>
           </div>
         </div>
 
         <div className="data-flow-visualization__stat data-flow-visualization__stat--danger">
           <Icons.Warning />
           <div className="data-flow-visualization__stat-content">
-            <span className="data-flow-visualization__stat-label">Page Faults</span>
-            <span className="data-flow-visualization__stat-value">{pageFaults}</span>
+            <span className="data-flow-visualization__stat-label">
+              Page Faults
+            </span>
+            <span className="data-flow-visualization__stat-value">
+              {pageFaults}
+            </span>
           </div>
         </div>
 
         <div className="data-flow-visualization__stat data-flow-visualization__stat--primary">
           <Icons.ChartBar />
           <div className="data-flow-visualization__stat-content">
-            <span className="data-flow-visualization__stat-label">Hit Ratio</span>
+            <span className="data-flow-visualization__stat-label">
+              Hit Ratio
+            </span>
             <span className="data-flow-visualization__stat-value">
               {(hitRatio * 100).toFixed(1)}%
             </span>

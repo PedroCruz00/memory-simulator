@@ -1,11 +1,13 @@
 # 🧠 Memory Simulator - Simulador de Memori## ✨ Mejoras Recientes (v2.2.0) - SCROLL + RAM TOTALMENTE FUNCIONALES
 
 ### 🖱️ SCROLL COMPLETAMENTE FUNCIONAL
+
 - ✅ **Scroll vertical 100% habilitado**: Corregido `App.css` (causa oculta)
 - ✅ **Todas las gráficas accesibles**: RAM, CPU, Disco, DataFlow, ProcessFlow visibles
 - ✅ **Sin restricciones**: Eliminados todos los `overflow: hidden` problemáticos
 
 ### 💾 RAM AHORA FUNCIONA CORRECTAMENTE
+
 - ✅ **Páginas iniciales en RAM**: Cada proceso carga 2-3 páginas al iniciarse
 - ✅ **Page Faults manejados**: Se cargan páginas desde disco automáticamente
 - ✅ **Algoritmo Clock activo**: Reemplazo de páginas funcionando
@@ -13,6 +15,7 @@
 - ✅ **Métricas correctas**: Hit Ratio 70-90%, Page Faults reales, RAM Utilization 40-100%
 
 ### 🚀 SIMULACIÓN COMPLETAMENTE FUNCIONAL
+
 - ✅ **Procesos ejecutan correctamente**: NEW → READY → RUNNING → BLOCKED → TERMINATED
 - ✅ **Ciclo de vida completo**: Todos los procesos completan su ejecución
 - ✅ **Bloqueos optimizados**: 10% probabilidad
@@ -62,11 +65,13 @@ npm run build
 ## ✨ Mejoras Recientes (v2.1.0) - SCROLL + LÓGICA OPTIMIZADA
 
 ### �️ SCROLL FUNCIONAL
+
 - ✅ **Scroll vertical habilitado**: Ahora puedes desplazarte para ver todo el contenido
 - ✅ **Todas las gráficas visibles**: RAM, CPU, Disco, DataFlow, ProcessFlow totalmente accesibles
 - ✅ **Sin restricciones de altura**: Eliminados `overflow: hidden` problemáticos
 
 ### 🚀 SIMULACIÓN COMPLETAMENTE FUNCIONAL
+
 - ✅ **Procesos ejecutan correctamente**: NEW → READY → RUNNING → BLOCKED → TERMINATED
 - ✅ **Ciclo de vida completo**: Todos los procesos completan su ejecución
 - ✅ **Bloqueos optimizados**: 10% probabilidad (vs 15% anterior)
@@ -75,18 +80,21 @@ npm run build
 - ✅ **Tiempo observable**: Procesos de 4-10s (vs 8-18s anterior)
 
 ### 📐 Layout Optimizado
+
 - ✅ **RAM en primera columna**: Ahora es lo primero que ves (prioridad visual)
 - ✅ **Grid mejorado**: 1.2fr 1fr 1fr (RAM más ancha)
 - ✅ **Altura controlada**: Max 600px con scroll vertical
 - ✅ **Espacio optimizado**: Gap reducido, mejor aprovechamiento
 
 ### 🔄 Algoritmo Clock Funcional
+
 - ✅ **Puntero se mueve**: Visible en cada page fault
 - ✅ **Bits R/M actualizan**: En cada acceso a memoria
 - ✅ **Segunda oportunidad**: R=1 → R=0 → Reemplazo
 - ✅ **Page Faults reales**: Contador incrementa dinámicamente
 
 ### 📊 Métricas en Tiempo Real
+
 - ✅ **RAM Usage**: % de memoria utilizada (actualiza dinámicamente)
 - ✅ **Page Faults**: Incrementa con cada fallo
 - ✅ **Hit Ratio**: Calculado en vivo
@@ -94,6 +102,7 @@ npm run build
 - ✅ **CPU Usage**: Muestra proceso actual
 
 ### 🎮 Inicio Automático
+
 - ✅ **3 procesos iniciales**: Ya listos al inicializar
 - ✅ **Click en Play**: Inmediatamente ves la acción
 - ✅ **Sin configuración extra**: Funciona out-of-the-box
@@ -103,11 +112,13 @@ npm run build
 ## ✨ Mejoras Anteriores (v2.0.1)
 
 ### 🔧 Funcionalidad
+
 - ✅ **Ciclo de ejecución automático**: El simulador ahora ejecuta automáticamente cada 500ms al presionar Play
 - ✅ **Re-renderizado correcto**: Los componentes se actualizan en tiempo real
 - ✅ **Cleanup efectivo**: Limpieza adecuada de intervalos al pausar o desmontar
 
 ### 📜 Scroll Mejorado
+
 - ✅ **Layout principal**: Scroll vertical en el grid principal
 - ✅ **RAM Frames**: Scroll cuando hay muchos frames (máx 400px)
 - ✅ **Process Details**: Scroll horizontal y vertical (máx 500px)
@@ -116,6 +127,7 @@ npm run build
 - ✅ **Scrollbars personalizados**: Diseño moderno con colores del tema
 
 ### 🎨 Visual
+
 - ✅ **Sin overflow**: Todo el contenido es accesible
 - ✅ **Height optimizado**: El layout se ajusta a la altura de la ventana
 - ✅ **Responsive completo**: Funciona en cualquier resolución

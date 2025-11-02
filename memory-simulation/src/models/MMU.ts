@@ -73,11 +73,11 @@ export class MMU {
     for (let i = 0; i < numPages; i++) {
       const page = new Page(i, this.ram.pageSize);
       process.pages.push(page);
-      
+
       // Cargar las primeras 2-3 páginas en RAM (código inicial del proceso)
       const shouldLoadToRAM = i < Math.min(3, numPages);
       let loadedToRAM = false;
-      
+
       if (shouldLoadToRAM) {
         // Buscar frame libre
         for (let f = 0; f < this.ram.frames.length; f++) {
@@ -89,7 +89,7 @@ export class MMU {
             this.ram.allocateFrame(f, process.pid, page);
             processPageTable.set(i, f);
             loadedToRAM = true;
-            
+
             this.emitEvent({
               type: "PAGE_LOAD",
               timestamp: Date.now(),
@@ -101,7 +101,7 @@ export class MMU {
           }
         }
       }
-      
+
       if (!loadedToRAM) {
         // Si no se cargó a RAM, almacenar en disco
         this.disk.storePage(process.pid, page);

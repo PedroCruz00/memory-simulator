@@ -186,7 +186,8 @@
   box-shadow: 0 0 10px var(--arrow-color);
 }
 
-.data-flow-visualization__arrow--active .data-flow-visualization__arrow-line::before {
+.data-flow-visualization__arrow--active
+  .data-flow-visualization__arrow-line::before {
   content: "";
   position: absolute;
   left: 0;

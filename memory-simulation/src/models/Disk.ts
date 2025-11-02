@@ -50,8 +50,16 @@ export class Disk {
   }
 
   // Obtener información de todas las páginas en disco (para visualización)
-  getAllPagesInfo(): Array<{ processPid: number; pageCount: number; pageNumbers: number[] }> {
-    const info: Array<{ processPid: number; pageCount: number; pageNumbers: number[] }> = [];
+  getAllPagesInfo(): Array<{
+    processPid: number;
+    pageCount: number;
+    pageNumbers: number[];
+  }> {
+    const info: Array<{
+      processPid: number;
+      pageCount: number;
+      pageNumbers: number[];
+    }> = [];
     this.pages.forEach((processPages, processPid) => {
       info.push({
         processPid,

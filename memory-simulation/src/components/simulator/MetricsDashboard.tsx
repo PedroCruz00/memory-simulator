@@ -20,18 +20,25 @@ export const MetricsDashboard: React.FC<MetricsDashboardProps> = ({
   currentTime,
 }) => {
   const metrics = useMemo(() => {
-    const activeProcesses = processes.filter((p) => p.state !== STATES.TERMINATED).length;
-    const terminatedProcesses = processes.filter((p) => p.state === STATES.TERMINATED).length;
+    const activeProcesses = processes.filter(
+      (p) => p.state !== STATES.TERMINATED
+    ).length;
+    const terminatedProcesses = processes.filter(
+      (p) => p.state === STATES.TERMINATED
+    ).length;
     const occupiedFrames = ram.frames.filter((f) => f !== null).length;
     const ramUsage = (occupiedFrames / ram.numFrames) * 100;
-    
+
     const diskInfo = processor.mmu.disk.getAllPagesInfo();
-    const totalPagesInDisk = diskInfo.reduce((sum, info) => sum + info.pageCount, 0);
+    const totalPagesInDisk = diskInfo.reduce(
+      (sum, info) => sum + info.pageCount,
+      0
+    );
     const diskUsage = Math.min((totalPagesInDisk / 100) * 100, 100);
-    
+
     const cpuUtilization = processor.currentProcess ? 100 : 0;
     const throughput = currentTime > 0 ? terminatedProcesses / currentTime : 0;
-    
+
     return {
       totalProcesses: processes.length,
       activeProcesses,

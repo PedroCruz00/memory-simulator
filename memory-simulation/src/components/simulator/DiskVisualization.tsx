@@ -18,7 +18,10 @@ interface DiskVisualizationProps {
   processes: Process[];
 }
 
-export const DiskVisualization: React.FC<DiskVisualizationProps> = ({ disk, processes }) => {
+export const DiskVisualization: React.FC<DiskVisualizationProps> = ({
+  disk,
+  processes,
+}) => {
   const diskInfo = disk.getAllPagesInfo();
   const totalPages = diskInfo.reduce((sum, info) => sum + info.pageCount, 0);
 

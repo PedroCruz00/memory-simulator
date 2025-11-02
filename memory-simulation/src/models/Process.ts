@@ -144,7 +144,7 @@ export class Process {
         `Invalid page number ${pageNumber} for process ${this.pid}`
       );
     }
-    
+
     try {
       // Try to access memory
       mmu.accessMemory(this, pageNumber);

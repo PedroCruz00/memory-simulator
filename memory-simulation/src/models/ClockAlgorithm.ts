@@ -17,7 +17,7 @@ export class ClockAlgorithm {
 
     while (iterations < maxIterations) {
       const frame = frames[this.pointer];
-      
+
       // Frame vacío o sin página, usarlo directamente
       if (!frame || !frame.page) {
         const victimIndex = this.pointer;
@@ -48,4 +48,3 @@ export class ClockAlgorithm {
     this.pointer = 0;
   }
 }
-

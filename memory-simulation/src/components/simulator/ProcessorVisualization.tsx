@@ -43,9 +43,7 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
         <div className="processor-visualization__current-header">
           <span>Proceso en Ejecución</span>
           {currentProcess && (
-            <span
-              className="processor-visualization__status processor-visualization__status--running"
-            >
+            <span className="processor-visualization__status processor-visualization__status--running">
               <Icons.Activity />
               RUNNING
             </span>
@@ -72,10 +70,14 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
             <div className="processor-visualization__process-info">
               <div className="processor-visualization__info-item">
                 <span className="processor-visualization__info-label">PC:</span>
-                <span className="processor-visualization__info-value">{currentProcess.pc}</span>
+                <span className="processor-visualization__info-value">
+                  {currentProcess.pc}
+                </span>
               </div>
               <div className="processor-visualization__info-item">
-                <span className="processor-visualization__info-label">Tiempo restante:</span>
+                <span className="processor-visualization__info-label">
+                  Tiempo restante:
+                </span>
                 <span className="processor-visualization__info-value">
                   {currentProcess.remainingTime}ms
                 </span>
@@ -124,7 +126,9 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
         </div>
         <div className="processor-visualization__queue-list">
           {readyQueue.length === 0 ? (
-            <div className="processor-visualization__queue-empty">Sin procesos</div>
+            <div className="processor-visualization__queue-empty">
+              Sin procesos
+            </div>
           ) : (
             readyQueue.map((process, index) => (
               <div
@@ -161,7 +165,9 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
         </div>
         <div className="processor-visualization__queue-list">
           {blockedQueue.length === 0 ? (
-            <div className="processor-visualization__queue-empty">Sin procesos</div>
+            <div className="processor-visualization__queue-empty">
+              Sin procesos
+            </div>
           ) : (
             blockedQueue.map((process, index) => (
               <div

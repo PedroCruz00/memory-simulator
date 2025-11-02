@@ -18,8 +18,11 @@ interface ProcessFlowDiagramProps {
   processes: Process[];
 }
 
-export const ProcessFlowDiagram: React.FC<ProcessFlowDiagramProps> = ({ processes }) => {
-  const countByState = (state: string) => processes.filter((p) => p.state === state).length;
+export const ProcessFlowDiagram: React.FC<ProcessFlowDiagramProps> = ({
+  processes,
+}) => {
+  const countByState = (state: string) =>
+    processes.filter((p) => p.state === state).length;
 
   const stateInfo = [
     {
@@ -88,7 +91,9 @@ export const ProcessFlowDiagram: React.FC<ProcessFlowDiagramProps> = ({ processe
               {info.icon}
             </div>
             <div className="process-flow-diagram__state-content">
-              <span className="process-flow-diagram__state-label">{info.label}</span>
+              <span className="process-flow-diagram__state-label">
+                {info.label}
+              </span>
               <span
                 className="process-flow-diagram__state-count"
                 style={{ color: info.color }}

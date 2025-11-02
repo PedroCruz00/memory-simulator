@@ -132,7 +132,9 @@ export const SimulatorControls: React.FC<SimulatorControlsProps> = ({
       {/* Configuration Panel */}
       {showConfig && (
         <div className="simulator-controls__config">
-          <h4 className="simulator-controls__config-title">Configuración del Simulador</h4>
+          <h4 className="simulator-controls__config-title">
+            Configuración del Simulador
+          </h4>
 
           <div className="simulator-controls__config-grid">
             <div className="simulator-controls__config-item">
@@ -145,12 +147,17 @@ export const SimulatorControls: React.FC<SimulatorControlsProps> = ({
                 className="simulator-controls__config-input"
                 value={configForm.ramFrames}
                 onChange={(e) =>
-                  setConfigForm({ ...configForm, ramFrames: parseInt(e.target.value) || 16 })
+                  setConfigForm({
+                    ...configForm,
+                    ramFrames: parseInt(e.target.value) || 16,
+                  })
                 }
                 min="4"
                 max="32"
               />
-              <span className="simulator-controls__config-hint">4-32 frames</span>
+              <span className="simulator-controls__config-hint">
+                4-32 frames
+              </span>
             </div>
 
             <div className="simulator-controls__config-item">
@@ -163,7 +170,10 @@ export const SimulatorControls: React.FC<SimulatorControlsProps> = ({
                 className="simulator-controls__config-input"
                 value={configForm.pageSize}
                 onChange={(e) =>
-                  setConfigForm({ ...configForm, pageSize: parseInt(e.target.value) || 4096 })
+                  setConfigForm({
+                    ...configForm,
+                    pageSize: parseInt(e.target.value) || 4096,
+                  })
                 }
                 step="1024"
               />
@@ -202,7 +212,10 @@ export const SimulatorControls: React.FC<SimulatorControlsProps> = ({
                 className="simulator-controls__config-input"
                 value={configForm.maxProcesses}
                 onChange={(e) =>
-                  setConfigForm({ ...configForm, maxProcesses: parseInt(e.target.value) || 10 })
+                  setConfigForm({
+                    ...configForm,
+                    maxProcesses: parseInt(e.target.value) || 10,
+                  })
                 }
                 min="1"
                 max="20"
