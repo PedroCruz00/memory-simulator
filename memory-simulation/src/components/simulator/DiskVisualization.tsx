@@ -1,88 +1,89 @@
+/**
+ * DiskVisualization
+ *
+ * Visualiza el estado del disco mostrando:
+ * - Páginas almacenadas organizadas por proceso
+ * - Capacidad total y utilizada
+ * - Información de cada página en disco
+ */
+
 import React from "react";
+import { Icons } from "../Icons";
 import { Disk } from "../../models/Disk";
 import { Process } from "../../models/Process";
 import "../../styles/DiskVisualization.css";
 
 interface DiskVisualizationProps {
-  disk: Disk | null;
+  disk: Disk;
   processes: Process[];
 }
 
-export const DiskVisualization: React.FC<DiskVisualizationProps> = ({
-  disk,
-  processes,
-}) => {
-  if (!disk) {
-    return (
-      <div className="disk-visualization">
-        <h3>💾 Disco (Swap Space)</h3>
-        <p className="disk-empty">Disco no inicializado</p>
-      </div>
-    );
-  }
+export const DiskVisualization: React.FC<DiskVisualizationProps> = ({ disk, processes }) => {
+  const diskInfo = disk.getAllPagesInfo();
+  const totalPages = diskInfo.reduce((sum, info) => sum + info.pageCount, 0);
 
-  // Obtener páginas en disco por proceso
-  const diskPages = processes
-    .map((p) => {
-      const processPages = disk.getProcessPages(p.pid);
-      if (processPages && processPages.size > 0) {
-        return {
-          process: p,
-          pageCount: processPages.size,
-          pageNumbers: Array.from(processPages.keys()) as number[],
-        };
-      }
-      return null;
-    })
-    .filter(Boolean);
-
-  const totalPagesInDisk = diskPages.reduce(
-    (sum, item) => sum + (item?.pageCount || 0),
-    0
-  );
+  const getProcessColor = (pid: number): string => {
+    const process = processes.find((p) => p.pid === pid);
+    return process?.color || "var(--neutral-gray)";
+  };
 
   return (
     <div className="disk-visualization">
-      <div className="disk-header">
-        <h3>💾 Disco (Swap Space)</h3>
-        <div className="disk-stats">
-          <span className="disk-stat">
-            📄 {totalPagesInDisk} páginas en disco
-          </span>
+      <div className="disk-visualization__header">
+        <div className="disk-visualization__title-group">
+          <Icons.Disk />
+          <h3 className="disk-visualization__title">Disco</h3>
+        </div>
+        <div className="disk-visualization__stats">
+          <span className="disk-visualization__stat">{totalPages} páginas</span>
         </div>
       </div>
 
-      <div className="disk-content">
-        {diskPages.length === 0 ? (
-          <p className="disk-empty">✨ Sin páginas en disco (todo en RAM)</p>
+      <div className="disk-visualization__content">
+        {diskInfo.length === 0 ? (
+          <div className="disk-visualization__empty">
+            <div className="disk-visualization__empty-icon">
+              <Icons.Disk />
+            </div>
+            <span>Sin páginas en disco</span>
+          </div>
         ) : (
-          <div className="disk-pages">
-            {diskPages.map(
-              (item) =>
-                item && (
-                  <div
-                    key={item.process.pid}
-                    className="disk-process-block"
-                    style={{
-                      borderLeft: `4px solid ${item.process.color}`,
-                    }}
+          <div className="disk-visualization__processes">
+            {diskInfo.map((info, index) => (
+              <div
+                key={info.processPid}
+                className="disk-visualization__process"
+                style={{
+                  borderColor: getProcessColor(info.processPid),
+                  animationDelay: `${index * 0.1}s`,
+                }}
+              >
+                <div className="disk-visualization__process-header">
+                  <span
+                    className="disk-visualization__process-pid"
+                    style={{ background: getProcessColor(info.processPid) }}
                   >
-                    <div className="disk-process-header">
-                      <strong>Proceso P{item.process.pid}</strong>
-                      <span className="disk-page-count">
-                        {item.pageCount} página{item.pageCount > 1 ? "s" : ""}
-                      </span>
+                    P{info.processPid}
+                  </span>
+                  <span className="disk-visualization__process-count">
+                    {info.pageCount} pág.
+                  </span>
+                </div>
+
+                <div className="disk-visualization__pages">
+                  {info.pageNumbers.slice(0, 12).map((pageNum) => (
+                    <div key={pageNum} className="disk-visualization__page">
+                      {pageNum}
                     </div>
-                    <div className="disk-page-numbers">
-                      {item.pageNumbers.map((pageNum) => (
-                        <span key={pageNum} className="disk-page-number">
-                          P{pageNum}
-                        </span>
-                      ))}
+                  ))}
+                  {info.pageNumbers.length > 12 && (
+                    <div className="disk-visualization__page disk-visualization__page--more">
+                      +{info.pageNumbers.length - 12}
                     </div>
-                  </div>
-                )
-            )}
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

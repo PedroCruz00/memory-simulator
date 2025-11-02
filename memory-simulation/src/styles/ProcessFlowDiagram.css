@@ -1,0 +1,177 @@
+/* Process Flow Diagram - Modern Design */
+
+.process-flow-diagram {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-primary);
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Header */
+.process-flow-diagram__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.process-flow-diagram__title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.process-flow-diagram__title-group .icon-svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-purple);
+}
+
+.process-flow-diagram__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.process-flow-diagram__total {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* States */
+.process-flow-diagram__states {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.process-flow-diagram__state {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 2px solid;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  animation: fadeInUp 0.3s ease-out backwards;
+}
+
+.process-flow-diagram__state:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.process-flow-diagram__state-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.process-flow-diagram__state-icon .icon-svg {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.process-flow-diagram__state-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.process-flow-diagram__state-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.process-flow-diagram__state-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Legend */
+.process-flow-diagram__legend {
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-primary);
+}
+
+.process-flow-diagram__legend-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.process-flow-diagram__legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.process-flow-diagram__legend-items span {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.process-flow-diagram__legend-items span::before {
+  content: "→";
+  color: var(--primary-purple);
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .process-flow-diagram {
+    padding: var(--spacing-md);
+  }
+
+  .process-flow-diagram__states {
+    grid-template-columns: 1fr;
+  }
+
+  .process-flow-diagram__legend-items {
+    font-size: 0.7rem;
+  }
+}

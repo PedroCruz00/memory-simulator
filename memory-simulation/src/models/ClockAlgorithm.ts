@@ -1,42 +1,51 @@
 export class ClockAlgorithm {
-  private frames: { page: { referenced: number } }[]; // Array de frames con páginas que tienen un bit de referencia
-  private pointer: number; // Puntero circular
+  private numFrames: number;
+  private pointer: number;
 
-  constructor(frames: { page: { referenced: number } }[]) {
-    this.frames = frames; // Array de frames en RAM
-    this.pointer = 0; // Puntero circular
+  constructor(numFrames: number) {
+    this.numFrames = numFrames;
+    this.pointer = 0;
   }
 
-  // Encuentra un frame víctima para reemplazo
-  findVictim(): number {
-    const maxIterations = this.frames.length * 2; // Evitar loops infinitos
+  getPointer(): number {
+    return this.pointer;
+  }
+
+  findVictim(frames: Array<{ page: { referenced: number } | null }>): number {
+    const maxIterations = this.numFrames * 2;
     let iterations = 0;
 
     while (iterations < maxIterations) {
-      const frame = this.frames[this.pointer];
-      if (!frame) {
-        // Frame vacío, usarlo directamente
+      const frame = frames[this.pointer];
+      
+      // Frame vacío o sin página, usarlo directamente
+      if (!frame || !frame.page) {
         const victimIndex = this.pointer;
-        this.pointer = (this.pointer + 1) % this.frames.length;
+        this.pointer = (this.pointer + 1) % this.numFrames;
         return victimIndex;
       }
 
+      // Si el bit de referencia es 0, víctima encontrada
       if (frame.page.referenced === 0) {
-        // Víctima encontrada
         const victimIndex = this.pointer;
-        this.pointer = (this.pointer + 1) % this.frames.length;
+        this.pointer = (this.pointer + 1) % this.numFrames;
         return victimIndex;
-      } else {
-        // Dar segunda oportunidad: resetear bit de referencia
-        frame.page.referenced = 0;
-        this.pointer = (this.pointer + 1) % this.frames.length;
       }
+
+      // Segunda oportunidad: resetear bit de referencia
+      frame.page.referenced = 0;
+      this.pointer = (this.pointer + 1) % this.numFrames;
       iterations++;
     }
 
-    // Fallback: reemplazar el actual si no se encuentra (raro)
+    // Fallback: retornar el frame actual
     const victimIndex = this.pointer;
-    this.pointer = (this.pointer + 1) % this.frames.length;
+    this.pointer = (this.pointer + 1) % this.numFrames;
     return victimIndex;
   }
+
+  reset(): void {
+    this.pointer = 0;
+  }
 }
+

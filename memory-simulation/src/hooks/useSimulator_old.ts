@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Processor } from "../models/Processor";
 import { RAM } from "../models/RAM";
 import { Disk } from "../models/Disk";
@@ -48,33 +48,18 @@ export const useSimulator = () => {
   // Inicializar el simulador con configuración
   const initializeSimulator = useCallback(
     (config: Partial<SimulatorConfig>) => {
-      const newConfig = { ...DEFAULT_CONFIG, ...config };
-
-      // Create RAM instance
-      const ram = new RAM(newConfig.ramFrames, newConfig.pageSize);
-
-      // Create Disk instance
+      const finalConfig = { ...DEFAULT_CONFIG, ...config };
+      const ram = new RAM(finalConfig.ramFrames, finalConfig.pageSize);
       const disk = new Disk();
-
-      // Create Processor with quantum (order: quantum, ram, disk)
-      const processor = new Processor(newConfig.processorQuantum, ram, disk);
-
-      // Create initial processes
-      const initialProcesses: Process[] = [];
-      for (let i = 1; i <= 3; i++) {
-        const canBeBlocked = i % 2 === 0; // Every other process can be blocked
-        const process = new Process(i, canBeBlocked);
-        processor.admitProcess(process);
-        initialProcesses.push(process);
-      }
+      const processor = new Processor(finalConfig.processorQuantum, ram, disk);
 
       setState((prev) => ({
         ...prev,
-        processor,
         ram,
         disk,
-        config: newConfig,
-        processes: initialProcesses,
+        processor,
+        config: finalConfig,
+        processes: [],
         currentTime: 0,
         isRunning: false,
       }));
@@ -82,23 +67,22 @@ export const useSimulator = () => {
     []
   );
 
-  // Agregar un nuevo proceso
+  // Crear y admitir un nuevo proceso
   const addProcess = useCallback(
     (canBeBlocked: boolean = false, memorySize?: number) => {
       setState((prev) => {
-        if (!prev.processor) return prev;
-
-        // Find max PID and add 1
-        const maxPid = prev.processes.reduce((max, p) => Math.max(max, p.pid), 0);
-        const newPid = maxPid + 1;
+        if (
+          !prev.processor ||
+          prev.processes.length >= prev.config.maxProcesses
+        ) {
+          return prev;
+        }
 
         const newProcess = new Process(
-          newPid,
+          prev.processes.length,
           canBeBlocked,
           memorySize
         );
-
-        // Add process to processor
         prev.processor.admitProcess(newProcess);
 
         return {
@@ -110,32 +94,10 @@ export const useSimulator = () => {
     []
   );
 
-  // Iniciar la simulación con ciclo automático
+  // Iniciar la simulación
   const startSimulation = useCallback(() => {
     setState((prev) => {
       if (!prev.processor) return prev;
-
-      // Clear existing interval if any
-      if (simulationIntervalRef.current) {
-        clearInterval(simulationIntervalRef.current);
-      }
-
-      // Start new simulation loop
-      simulationIntervalRef.current = setInterval(() => {
-        setState((current) => {
-          if (!current.processor || !current.isRunning) return current;
-
-          // Execute one scheduling cycle
-          current.processor.schedule();
-
-          return {
-            ...current,
-            currentTime: current.currentTime + 1,
-            processes: [...current.processes], // Force re-render
-          };
-        });
-      }, 500); // Execute every 500ms
-
       prev.processor.setAutoScheduling(true);
       return { ...prev, isRunning: true };
     });
@@ -143,11 +105,6 @@ export const useSimulator = () => {
 
   // Pausar la simulación
   const pauseSimulation = useCallback(() => {
-    if (simulationIntervalRef.current) {
-      clearInterval(simulationIntervalRef.current);
-      simulationIntervalRef.current = null;
-    }
-
     setState((prev) => {
       if (!prev.processor) return prev;
       prev.processor.setAutoScheduling(false);
@@ -160,11 +117,7 @@ export const useSimulator = () => {
     setState((prev) => {
       if (!prev.processor) return prev;
       prev.processor.schedule();
-      return { 
-        ...prev, 
-        currentTime: prev.currentTime + 1,
-        processes: [...prev.processes], // Force re-render
-      };
+      return { ...prev, currentTime: prev.currentTime + 1 };
     });
   }, []);
 
@@ -183,15 +136,6 @@ export const useSimulator = () => {
       ram: null,
       disk: null,
     }));
-  }, []);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (simulationIntervalRef.current) {
-        clearInterval(simulationIntervalRef.current);
-      }
-    };
   }, []);
 
   return {

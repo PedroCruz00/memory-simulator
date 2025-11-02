@@ -1,168 +1,232 @@
+/**
+ * SimulatorControls
+ *
+ * Panel de control principal del simulador con:
+ * - Botones de control (Inicializar, Play, Pause, Step, Reset)
+ * - Botón para agregar procesos
+ * - Configuración del simulador
+ */
+
 import React, { useState } from "react";
+import { Icons } from "../Icons";
 import type { SimulatorConfig } from "../../hooks/useSimulator";
 import "../../styles/SimulatorControls.css";
 
 interface SimulatorControlsProps {
-  config: SimulatorConfig;
-  onConfigChange: (config: Partial<SimulatorConfig>) => void;
-  onInitialize: () => void;
-  onAddProcess: () => void;
+  isRunning: boolean;
+  isInitialized: boolean;
+  onInitialize: (config: SimulatorConfig) => void;
   onStart: () => void;
   onPause: () => void;
   onStep: () => void;
   onReset: () => void;
-  isRunning: boolean;
-  processCount: number;
+  onAddProcess: () => void;
+  config: SimulatorConfig;
 }
 
 export const SimulatorControls: React.FC<SimulatorControlsProps> = ({
-  config,
-  onConfigChange,
+  isRunning,
+  isInitialized,
   onInitialize,
-  onAddProcess,
   onStart,
   onPause,
   onStep,
   onReset,
-  isRunning,
-  processCount,
+  onAddProcess,
+  config,
 }) => {
-  const [memorySize, setMemorySize] = useState<number>(8192);
-  const [canBeBlocked, setCanBeBlocked] = useState<boolean>(false);
+  const [showConfig, setShowConfig] = useState(false);
+  const [configForm, setConfigForm] = useState<SimulatorConfig>(config);
 
-  const handleAddProcess = () => {
-    onAddProcess();
+  const handleInitialize = () => {
+    onInitialize(configForm);
+    setShowConfig(false);
   };
 
   return (
     <div className="simulator-controls">
-      <div className="control-section">
-        <h3>Configuración Inicial</h3>
-        <div className="config-group">
-          <label>
-            Frames en RAM:
-            <input
-              type="number"
-              min="4"
-              max="64"
-              value={config.ramFrames}
-              onChange={(e) =>
-                onConfigChange({ ramFrames: parseInt(e.target.value) })
-              }
-            />
-          </label>
-          <label>
-            Tamaño de Página (bytes):
-            <input
-              type="number"
-              min="512"
-              max="16384"
-              step="512"
-              value={config.pageSize}
-              onChange={(e) =>
-                onConfigChange({ pageSize: parseInt(e.target.value) })
-              }
-            />
-          </label>
-          <label>
-            Quantum del Procesador (ms):
-            <input
-              type="number"
-              min="100"
-              max="10000"
-              step="100"
-              value={config.processorQuantum}
-              onChange={(e) =>
-                onConfigChange({ processorQuantum: parseInt(e.target.value) })
-              }
-            />
-          </label>
-          <label>
-            Máximo de Procesos:
-            <input
-              type="number"
-              min="1"
-              max="20"
-              value={config.maxProcesses}
-              onChange={(e) =>
-                onConfigChange({ maxProcesses: parseInt(e.target.value) })
-              }
-            />
-          </label>
-        </div>
-        <button className="btn btn-primary" onClick={onInitialize}>
-          Inicializar Simulador
+      <div className="simulator-controls__main">
+        {/* Configuration Button */}
+        <button
+          className="simulator-controls__btn simulator-controls__btn--config"
+          onClick={() => setShowConfig(!showConfig)}
+          title="Configuración"
+        >
+          <Icons.Settings />
+          <span>Config</span>
         </button>
+
+        {/* Initialize Button */}
+        {!isInitialized && (
+          <button
+            className="simulator-controls__btn simulator-controls__btn--primary"
+            onClick={handleInitialize}
+          >
+            <Icons.CheckCircle />
+            <span>Inicializar</span>
+          </button>
+        )}
+
+        {/* Control Buttons */}
+        {isInitialized && (
+          <>
+            <div className="simulator-controls__divider" />
+
+            {/* Play/Pause */}
+            {!isRunning ? (
+              <button
+                className="simulator-controls__btn simulator-controls__btn--success"
+                onClick={onStart}
+                title="Iniciar simulación"
+              >
+                <Icons.Play />
+                <span>Play</span>
+              </button>
+            ) : (
+              <button
+                className="simulator-controls__btn simulator-controls__btn--warning"
+                onClick={onPause}
+                title="Pausar simulación"
+              >
+                <Icons.Pause />
+                <span>Pause</span>
+              </button>
+            )}
+
+            {/* Step */}
+            <button
+              className="simulator-controls__btn"
+              onClick={onStep}
+              disabled={isRunning}
+              title="Ejecutar un paso"
+            >
+              <Icons.Step />
+              <span>Step</span>
+            </button>
+
+            <div className="simulator-controls__divider" />
+
+            {/* Add Process */}
+            <button
+              className="simulator-controls__btn simulator-controls__btn--accent"
+              onClick={onAddProcess}
+              title="Agregar proceso"
+            >
+              <Icons.Add />
+              <span>Proceso</span>
+            </button>
+
+            {/* Reset */}
+            <button
+              className="simulator-controls__btn simulator-controls__btn--danger"
+              onClick={onReset}
+              title="Reiniciar simulación"
+            >
+              <Icons.Reset />
+              <span>Reset</span>
+            </button>
+          </>
+        )}
       </div>
 
-      <div className="control-section">
-        <h3>Control de Ejecución</h3>
-        <div className="button-group">
-          <button
-            className={`btn ${isRunning ? "btn-warning" : "btn-success"}`}
-            onClick={isRunning ? onPause : onStart}
-            disabled={processCount === 0}
-          >
-            {isRunning ? "⏸ Pausar" : "▶ Iniciar"}
-          </button>
-          <button
-            className="btn btn-info"
-            onClick={onStep}
-            disabled={isRunning || processCount === 0}
-          >
-            ⏭ Paso
-          </button>
-          <button className="btn btn-danger" onClick={onReset}>
-            🔄 Reiniciar
-          </button>
+      {/* Configuration Panel */}
+      {showConfig && (
+        <div className="simulator-controls__config">
+          <h4 className="simulator-controls__config-title">Configuración del Simulador</h4>
+
+          <div className="simulator-controls__config-grid">
+            <div className="simulator-controls__config-item">
+              <label className="simulator-controls__config-label">
+                <Icons.Memory />
+                <span>Frames RAM</span>
+              </label>
+              <input
+                type="number"
+                className="simulator-controls__config-input"
+                value={configForm.ramFrames}
+                onChange={(e) =>
+                  setConfigForm({ ...configForm, ramFrames: parseInt(e.target.value) || 16 })
+                }
+                min="4"
+                max="32"
+              />
+              <span className="simulator-controls__config-hint">4-32 frames</span>
+            </div>
+
+            <div className="simulator-controls__config-item">
+              <label className="simulator-controls__config-label">
+                <Icons.Disk />
+                <span>Tamaño Página</span>
+              </label>
+              <input
+                type="number"
+                className="simulator-controls__config-input"
+                value={configForm.pageSize}
+                onChange={(e) =>
+                  setConfigForm({ ...configForm, pageSize: parseInt(e.target.value) || 4096 })
+                }
+                step="1024"
+              />
+              <span className="simulator-controls__config-hint">bytes</span>
+            </div>
+
+            <div className="simulator-controls__config-item">
+              <label className="simulator-controls__config-label">
+                <Icons.Clock />
+                <span>Quantum</span>
+              </label>
+              <input
+                type="number"
+                className="simulator-controls__config-input"
+                value={configForm.processorQuantum}
+                onChange={(e) =>
+                  setConfigForm({
+                    ...configForm,
+                    processorQuantum: parseInt(e.target.value) || 1000,
+                  })
+                }
+                min="500"
+                max="5000"
+                step="100"
+              />
+              <span className="simulator-controls__config-hint">ms</span>
+            </div>
+
+            <div className="simulator-controls__config-item">
+              <label className="simulator-controls__config-label">
+                <Icons.Process />
+                <span>Max Procesos</span>
+              </label>
+              <input
+                type="number"
+                className="simulator-controls__config-input"
+                value={configForm.maxProcesses}
+                onChange={(e) =>
+                  setConfigForm({ ...configForm, maxProcesses: parseInt(e.target.value) || 10 })
+                }
+                min="1"
+                max="20"
+              />
+              <span className="simulator-controls__config-hint">procesos</span>
+            </div>
+          </div>
+
+          <div className="simulator-controls__config-actions">
+            <button
+              className="simulator-controls__btn simulator-controls__btn--primary"
+              onClick={handleInitialize}
+            >
+              Aplicar Configuración
+            </button>
+            <button
+              className="simulator-controls__btn"
+              onClick={() => setShowConfig(false)}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className="control-section">
-        <h3>Crear Proceso</h3>
-        <div className="process-config">
-          <label>
-            Tamaño de Memoria (bytes):
-            <input
-              type="number"
-              min="4096"
-              max="65536"
-              step="4096"
-              value={memorySize}
-              onChange={(e) => setMemorySize(parseInt(e.target.value))}
-            />
-          </label>
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={canBeBlocked}
-              onChange={(e) => setCanBeBlocked(e.target.checked)}
-            />
-            Puede Bloquearse (I/O)
-          </label>
-          <button
-            className="btn btn-secondary"
-            onClick={handleAddProcess}
-            disabled={processCount >= config.maxProcesses}
-          >
-            ➕ Crear Proceso
-          </button>
-        </div>
-      </div>
-
-      <div className="info-panel">
-        <h4>Información</h4>
-        <p>
-          <strong>Procesos Activos:</strong> {processCount}/{config.maxProcesses}
-        </p>
-        <p>
-          <strong>RAM Total:</strong>{" "}
-          {(config.ramFrames * config.pageSize) / 1024} KB
-        </p>
-        <p>
-          <strong>Estado:</strong> {isRunning ? "🟢 Ejecutando" : "🔴 Parado"}
-        </p>
-      </div>
+      )}
     </div>
   );
 };

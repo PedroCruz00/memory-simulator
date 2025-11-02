@@ -1,10 +1,31 @@
-import React, { useEffect } from "react";
+/**
+ * MemorySimulator
+ *
+ * Componente principal del simulador de memoria virtual.
+ * Muestra la interacción completa entre CPU, MMU, RAM y Disco
+ * con animaciones fluidas y visualización en tiempo real.
+ *
+ * Features:
+ * - Gestión de procesos con estados (NEW, READY, RUNNING, BLOCKED, TERMINATED)
+ * - MMU con algoritmo Clock para reemplazo de páginas
+ * - Visualización de RAM con frames y bits R/M
+ * - Visualización de Disco con páginas almacenadas
+ * - Métricas en tiempo real (Page Faults, Hit Ratio, etc.)
+ * - Animaciones de flujo de datos entre componentes
+ */
+
+import React, { useEffect, useState } from "react";
 import { useSimulator } from "../hooks/useSimulator";
+import { Icons } from "./Icons";
 import { SimulatorControls } from "./simulator/SimulatorControls";
 import { RAMVisualization } from "./simulator/RAMVisualization";
 import { ProcessorVisualization } from "./simulator/ProcessorVisualization";
-import { ProcessDetails } from "./simulator/ProcessDetails";
 import { DiskVisualization } from "./simulator/DiskVisualization";
+import { MetricsDashboard } from "./simulator/MetricsDashboard";
+import { ProcessDetails } from "./simulator/ProcessDetails";
+import { DataFlowVisualization } from "./simulator/DataFlowVisualization";
+import { ProcessFlowDiagram } from "./simulator/ProcessFlowDiagram";
+import type { MMUEvent } from "../models/MMU";
 import "../styles/SimulatorLayout.css";
 
 export const MemorySimulator: React.FC = () => {
@@ -18,108 +39,136 @@ export const MemorySimulator: React.FC = () => {
     resetSimulation,
   } = useSimulator();
 
-  useEffect(() => {
-    // Inicializar con configuración por defecto
-    initializeSimulator({});
-  }, [initializeSimulator]);
+  const [lastEvent, setLastEvent] = useState<MMUEvent | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const handleConfigChange = (config: any) => {
-    // Este handler permite cambiar la configuración
-    state.config = { ...state.config, ...config };
+  useEffect(() => {
+    if (!isInitialized) {
+      initializeSimulator({
+        ramFrames: 16,
+        pageSize: 4096,
+        processorQuantum: 1000,
+        maxProcesses: 10,
+      });
+      setIsInitialized(true);
+    }
+  }, [isInitialized, initializeSimulator]);
+
+  useEffect(() => {
+    if (state.processor && state.processor.mmu) {
+      state.processor.mmu.onEvent = (event: MMUEvent) => {
+        setLastEvent(event);
+        setTimeout(() => setLastEvent(null), 2000);
+      };
+    }
+  }, [state.processor]);
+
+  const handleInitialize = (config: {
+    ramFrames: number;
+    pageSize: number;
+    processorQuantum: number;
+    maxProcesses: number;
+  }) => {
+    initializeSimulator(config);
   };
 
   const handleAddProcess = () => {
-    if (state.processor) {
-      // Pasar memorySize por defecto (8KB = 2 páginas de 4096 bytes)
-      addProcess(false, 8192);
-    }
+    const canBeBlocked = Math.random() > 0.5;
+    addProcess(canBeBlocked);
   };
 
   return (
-    <div className="simulator-container">
+    <div className="simulator-layout">
       <header className="simulator-header">
         <div className="header-content">
-          <h1>🖥️ Simulador de Memoria y Procesos</h1>
-          <p>Visualización interactiva del sistema operativo</p>
+          <h1 className="simulator-title">
+            <span className="title-gradient">Memory Simulator</span>
+          </h1>
+          <p className="simulator-subtitle">
+            Simulación Interactiva de Memoria Virtual con Algoritmo Clock
+          </p>
         </div>
       </header>
 
-      <main className="simulator-main">
-        <div className="layout-grid">
-          {/* Columna izquierda: Controles */}
-          <div className="column controls-column">
-            <SimulatorControls
-              config={state.config}
-              onConfigChange={handleConfigChange}
-              onInitialize={() => initializeSimulator(state.config)}
-              onAddProcess={handleAddProcess}
-              onStart={startSimulation}
-              onPause={pauseSimulation}
-              onStep={stepSimulation}
-              onReset={resetSimulation}
-              isRunning={state.isRunning}
-              processCount={state.processes.length}
+      <div className="simulator-controls-container">
+        <SimulatorControls
+          isRunning={state.isRunning}
+          isInitialized={!!state.processor}
+          onInitialize={handleInitialize}
+          onStart={startSimulation}
+          onPause={pauseSimulation}
+          onStep={stepSimulation}
+          onReset={resetSimulation}
+          onAddProcess={handleAddProcess}
+          config={state.config}
+        />
+      </div>
+
+      {state.processor && state.ram && state.disk && (
+        <>
+          <div className="simulator-metrics-container">
+            <MetricsDashboard
+              ram={state.ram}
+              processor={state.processor}
+              processes={state.processes}
+              currentTime={state.currentTime}
             />
           </div>
 
-          {/* Columna derecha: Visualizaciones */}
-          <div className="column visualizations-column">
-            {/* Fila superior: RAM y Procesador */}
-            <div className="visualizations-row">
-              <div className="visualization-box">
-                <RAMVisualization ram={state.ram} processes={state.processes} />
-              </div>
-              <div className="visualization-box">
-                <ProcessorVisualization
-                  processor={state.processor}
-                  processes={state.processes}
-                />
-              </div>
+          <div className="simulator-main-grid">
+            {/* Columna Izquierda: RAM */}
+            <div className="simulator-column simulator-column--left">
+              <RAMVisualization
+                ram={state.ram}
+                processes={state.processes}
+                clockPointer={state.processor.mmu.clock.getPointer()}
+              />
             </div>
 
-            {/* Fila media: Disco y Estadísticas */}
-            <div className="visualizations-row">
-              <div className="visualization-box">
-                <DiskVisualization disk={state.disk} processes={state.processes} />
-              </div>
-              <div className="visualization-box">
-                <div className="statistics-panel">
-                  <h3>📊 Estadísticas</h3>
-                  <div className="stats-grid">
-                    <div className="stat-item">
-                      <span className="stat-label">Procesos Totales:</span>
-                      <span className="stat-value">{state.processes.length}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Frames en RAM:</span>
-                      <span className="stat-value">
-                        {state.ram?.frames.filter((f) => f !== null).length || 0} /{" "}
-                        {state.config.ramFrames}
-                      </span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Tiempo Actual:</span>
-                      <span className="stat-value">{state.currentTime} ms</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* Columna Central: CPU */}
+            <div className="simulator-column simulator-column--center">
+              <ProcessorVisualization
+                processor={state.processor}
+                currentTime={state.currentTime}
+              />
             </div>
 
-            {/* Fila inferior: Detalles de Procesos */}
-            <div className="visualization-box full-width">
-              <ProcessDetails processes={state.processes} />
+            {/* Columna Derecha: Disco y Diagrama */}
+            <div className="simulator-column simulator-column--right">
+              <DiskVisualization disk={state.disk} processes={state.processes} />
+              <ProcessFlowDiagram processes={state.processes} />
             </div>
           </div>
-        </div>
-      </main>
 
-      <footer className="simulator-footer">
-        <p>
-          Simulador de Sistema Operativo | Gestión de Memoria Virtual con
-          Paginación
-        </p>
-      </footer>
+          {/* DataFlow ocupa todo el ancho */}
+          <div className="simulator-dataflow-container">
+            <DataFlowVisualization
+              lastEvent={lastEvent}
+              processor={state.processor}
+              ram={state.ram}
+              disk={state.disk}
+            />
+          </div>
+
+          <div className="simulator-details-container">
+            <ProcessDetails processes={state.processes} ram={state.ram} disk={state.disk} />
+          </div>
+        </>
+      )}
+
+      {!state.processor && (
+        <div className="simulator-empty-state">
+          <div className="empty-state-content">
+            <div className="empty-state-icon">
+              <Icons.Settings />
+            </div>
+            <h2 className="empty-state-title">Inicializa el Simulador</h2>
+            <p className="empty-state-message">
+              Configura los parámetros del simulador y haz clic en "Inicializar" para comenzar.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

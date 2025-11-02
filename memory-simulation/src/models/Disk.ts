@@ -39,6 +39,11 @@ export class Disk {
     this.pages.delete(processPid);
   }
 
+  // Liberar todas las páginas de un proceso (alias de clearPages)
+  freeProcessPages(processPid: number): void {
+    this.clearPages(processPid);
+  }
+
   // Obtener todas las páginas de un proceso (para visualización)
   getProcessPages(processPid: number): Map<number, Page> | undefined {
     return this.pages.get(processPid);

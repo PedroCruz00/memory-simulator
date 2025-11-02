@@ -3,6 +3,15 @@ import { PROCESS_COLORS } from "../constants/colors";
 import type { Page } from "./MMU";
 import type { MMU } from "./MMU";
 
+export interface TransitionInfo {
+  pid: number;
+  from: string;
+  to: string;
+  reason: string;
+  timestamp: Date;
+  timeInState: number;
+}
+
 export class Process {
   pid: number;
   state: string;
@@ -22,7 +31,7 @@ export class Process {
     timeInPreviousState?: number;
   }>;
   stateStartTime: Date;
-  onTransition: ((info: any) => void) | null;
+  onTransition: ((info: TransitionInfo) => void) | null;
 
   constructor(
     pid: number,
@@ -40,7 +49,7 @@ export class Process {
     }; // Simulated registers
     this.systemCalls = []; // Track system calls
     this.canBeBlockedFlag = canBeBlocked; // Whether process can be blocked
-    this.remainingTime = Math.floor(Math.random() * 7000) + 3000; // CPU time (3-10s)
+    this.remainingTime = Math.floor(Math.random() * 6000) + 4000; // CPU time (4-10s) - tiempo moderado para observar el ciclo completo
     this.memorySize = memorySize; // Memory size in bytes (4KB-36KB)
     this.pages = []; // Array of Page objects (initialized by MMU)
     this.color = PROCESS_COLORS[pid % PROCESS_COLORS.length]; // Assign color based on PID
@@ -90,6 +99,7 @@ export class Process {
         to: newState,
         reason,
         timestamp: now,
+        timeInState: timeInCurrentState,
       });
     }
   }
@@ -134,7 +144,21 @@ export class Process {
         `Invalid page number ${pageNumber} for process ${this.pid}`
       );
     }
-    mmu.accessMemory(this, pageNumber);
+    
+    try {
+      // Try to access memory
+      mmu.accessMemory(this, pageNumber);
+    } catch (error) {
+      // Page fault occurred, handle it
+      const err = error as Error;
+      if (err.message.includes("Page fault")) {
+        // Handle the page fault by loading the page into RAM
+        mmu.handlePageFault(this, pageNumber);
+      } else {
+        // Re-throw if it's a different error
+        throw error;
+      }
+    }
   }
 
   // Added: Get summary of page locations (for debugging or UI)

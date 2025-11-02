@@ -1,104 +1,190 @@
+/**
+ * ProcessorVisualization
+ *
+ * Visualiza el estado del procesador mostrando:
+ * - Proceso en ejecución actual o estado IDLE
+ * - Cola de procesos READY
+ * - Cola de procesos BLOCKED
+ * - Quantum restante
+ * - Registros del proceso actual
+ */
+
 import React from "react";
+import { Icons } from "../Icons";
 import { Processor } from "../../models/Processor";
-import { Process } from "../../models/Process";
 import "../../styles/ProcessorVisualization.css";
 
 interface ProcessorVisualizationProps {
-  processor: Processor | null;
-  processes: Process[];
+  processor: Processor;
+  currentTime: number;
 }
 
 export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
   processor,
-  processes,
+  currentTime,
 }) => {
-  if (!processor) {
-    return (
-      <div className="processor-visualization">
-        <p className="placeholder">Inicializa el simulador para ver Procesador</p>
-      </div>
-    );
-  }
-
-  const getStateColor = (state: string) => {
-    const colors: Record<string, string> = {
-      NEW: "#95A5A6",
-      READY: "#3498DB",
-      RUNNING: "#2ECC71",
-      BLOCKED: "#E74C3C",
-      TERMINATED: "#7F8C8D",
-    };
-    return colors[state] || "#95A5A6";
-  };
-
-  const readyCount = processor.readyQueue.length;
-  const blockedCount = processor.blockedQueue.length;
-  const runningProcess = processor.currentProcess;
+  const { currentProcess, readyQueue, blockedQueue } = processor;
 
   return (
     <div className="processor-visualization">
-      <h3>Estado del Procesador</h3>
-
-      <div className="processor-status">
-        <div className="status-item current">
-          <h4>Proceso en Ejecución</h4>
-          {runningProcess ? (
-            <div className="process-card">
-              <p>
-                <strong>PID:</strong> {runningProcess.pid}
-              </p>
-              <p>
-                <strong>Estado:</strong> {runningProcess.state}
-              </p>
-              <p>
-                <strong>Tiempo Restante:</strong> {runningProcess.remainingTime} ms
-              </p>
-              <p>
-                <strong>Prioridad:</strong> {runningProcess.priority}
-              </p>
-            </div>
-          ) : (
-            <p className="empty">Sin proceso en ejecución</p>
-          )}
+      <div className="processor-visualization__header">
+        <div className="processor-visualization__title-group">
+          <Icons.CPU />
+          <h3 className="processor-visualization__title">CPU</h3>
         </div>
-
-        <div className="status-item ready">
-          <h4>Cola READY ({readyCount})</h4>
-          <div className="queue-visual">
-            {processor.readyQueue.map((p, idx) => (
-              <div key={idx} className="queue-process">
-                <span className="pid">P{p.pid}</span>
-              </div>
-            ))}
-          </div>
-          {readyCount === 0 && <p className="empty">Cola vacía</p>}
-        </div>
-
-        <div className="status-item blocked">
-          <h4>Cola BLOCKED ({blockedCount})</h4>
-          <div className="queue-visual">
-            {processor.blockedQueue.map((p, idx) => (
-              <div key={idx} className="queue-process blocked">
-                <span className="pid">P{p.pid}</span>
-              </div>
-            ))}
-          </div>
-          {blockedCount === 0 && <p className="empty">Cola vacía</p>}
+        <div className="processor-visualization__time">
+          <Icons.Clock />
+          <span>Ciclo {currentTime}</span>
         </div>
       </div>
 
-      <div className="process-states">
-        <h4>Estados de Procesos</h4>
-        <div className="states-grid">
-          {processes.map((p) => (
-            <div key={p.pid} className="state-badge" style={{
-              backgroundColor: getStateColor(p.state),
-              borderColor: p.pid === runningProcess?.pid ? "#FFD700" : "transparent"
-            }}>
-              <div className="badge-pid">P{p.pid}</div>
-              <div className="badge-state">{p.state}</div>
+      {/* Current Process */}
+      <div className="processor-visualization__current">
+        <div className="processor-visualization__current-header">
+          <span>Proceso en Ejecución</span>
+          {currentProcess && (
+            <span
+              className="processor-visualization__status processor-visualization__status--running"
+            >
+              <Icons.Activity />
+              RUNNING
+            </span>
+          )}
+        </div>
+
+        {currentProcess ? (
+          <div
+            className="processor-visualization__process-card processor-visualization__process-card--current"
+            style={{ borderColor: currentProcess.color }}
+          >
+            <div className="processor-visualization__process-header">
+              <span
+                className="processor-visualization__process-pid"
+                style={{ background: currentProcess.color }}
+              >
+                P{currentProcess.pid}
+              </span>
+              <span className="processor-visualization__process-priority">
+                Prioridad: {currentProcess.priority}
+              </span>
             </div>
-          ))}
+
+            <div className="processor-visualization__process-info">
+              <div className="processor-visualization__info-item">
+                <span className="processor-visualization__info-label">PC:</span>
+                <span className="processor-visualization__info-value">{currentProcess.pc}</span>
+              </div>
+              <div className="processor-visualization__info-item">
+                <span className="processor-visualization__info-label">Tiempo restante:</span>
+                <span className="processor-visualization__info-value">
+                  {currentProcess.remainingTime}ms
+                </span>
+              </div>
+            </div>
+
+            <div className="processor-visualization__registers">
+              <div className="processor-visualization__register">
+                <span>AX</span>
+                <span>{currentProcess.registers.AX}</span>
+              </div>
+              <div className="processor-visualization__register">
+                <span>BX</span>
+                <span>{currentProcess.registers.BX}</span>
+              </div>
+              <div className="processor-visualization__register">
+                <span>CX</span>
+                <span>{currentProcess.registers.CX}</span>
+              </div>
+            </div>
+
+            <div className="processor-visualization__memory-info">
+              <Icons.Memory />
+              <span>{(currentProcess.memorySize / 1024).toFixed(1)} KB</span>
+              <span className="processor-visualization__separator">|</span>
+              <span>{currentProcess.pages.length} páginas</span>
+            </div>
+          </div>
+        ) : (
+          <div className="processor-visualization__idle">
+            <div className="processor-visualization__idle-icon">
+              <Icons.CPU />
+            </div>
+            <span>IDLE</span>
+          </div>
+        )}
+      </div>
+
+      {/* Ready Queue */}
+      <div className="processor-visualization__queue">
+        <div className="processor-visualization__queue-header">
+          <span>Cola READY</span>
+          <span className="processor-visualization__queue-count">
+            {readyQueue.length}
+          </span>
+        </div>
+        <div className="processor-visualization__queue-list">
+          {readyQueue.length === 0 ? (
+            <div className="processor-visualization__queue-empty">Sin procesos</div>
+          ) : (
+            readyQueue.map((process, index) => (
+              <div
+                key={process.pid}
+                className="processor-visualization__queue-item"
+                style={{
+                  borderColor: process.color,
+                  animationDelay: `${index * 0.05}s`,
+                }}
+              >
+                <span
+                  className="processor-visualization__queue-item-pid"
+                  style={{ background: process.color }}
+                >
+                  P{process.pid}
+                </span>
+                <div className="processor-visualization__queue-item-info">
+                  <span>Pri: {process.priority}</span>
+                  <span>{process.remainingTime}ms</span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Blocked Queue */}
+      <div className="processor-visualization__queue">
+        <div className="processor-visualization__queue-header">
+          <span>Cola BLOCKED</span>
+          <span className="processor-visualization__queue-count processor-visualization__queue-count--blocked">
+            {blockedQueue.length}
+          </span>
+        </div>
+        <div className="processor-visualization__queue-list">
+          {blockedQueue.length === 0 ? (
+            <div className="processor-visualization__queue-empty">Sin procesos</div>
+          ) : (
+            blockedQueue.map((process, index) => (
+              <div
+                key={process.pid}
+                className="processor-visualization__queue-item processor-visualization__queue-item--blocked"
+                style={{
+                  borderColor: process.color,
+                  animationDelay: `${index * 0.05}s`,
+                }}
+              >
+                <span
+                  className="processor-visualization__queue-item-pid"
+                  style={{ background: process.color }}
+                >
+                  P{process.pid}
+                </span>
+                <div className="processor-visualization__queue-item-info">
+                  <Icons.Warning />
+                  <span>Page Fault</span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

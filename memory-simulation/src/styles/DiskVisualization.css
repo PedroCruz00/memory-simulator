@@ -1,137 +1,185 @@
+/* Disk Visualization - Modern Card Design */
+
 .disk-visualization {
-  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
-  border-radius: 12px;
-  padding: 20px;
-  color: white;
-  min-height: 250px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-primary);
+  transition: all var(--transition-base);
+  animation: fadeIn 0.5s ease-out;
 }
 
-.disk-header {
-  margin-bottom: 15px;
+.disk-visualization:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-accent);
 }
 
-.disk-header h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.3em;
-  font-weight: 600;
+/* Header */
+.disk-visualization__header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
 }
 
-.disk-stats {
+.disk-visualization__title-group {
   display: flex;
-  gap: 15px;
-  font-size: 0.9em;
-  opacity: 0.95;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-.disk-stat {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 12px;
-  border-radius: 6px;
+.disk-visualization__title-group .icon-svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-cyan);
+}
+
+.disk-visualization__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.disk-visualization__stats {
+  font-size: 0.875rem;
+}
+
+.disk-visualization__stat {
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-.disk-content {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 5px;
+/* Content */
+.disk-visualization__content {
+  min-height: 200px;
 }
 
-.disk-empty {
-  text-align: center;
-  padding: 40px 20px;
-  font-size: 1em;
-  opacity: 0.8;
+/* Empty State */
+.disk-visualization__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-primary);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  gap: var(--spacing-md);
+  min-height: 200px;
+}
+
+.disk-visualization__empty-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  opacity: 0.5;
+}
+
+.disk-visualization__empty-icon .icon-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.disk-visualization__empty span {
+  font-size: 0.875rem;
   font-style: italic;
 }
 
-.disk-pages {
+/* Processes */
+.disk-visualization__processes {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-md);
 }
 
-.disk-process-block {
-  background: rgba(255, 255, 255, 0.95);
-  color: #333;
-  padding: 12px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+.disk-visualization__process {
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 2px solid;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  animation: fadeInUp 0.3s ease-out backwards;
 }
 
-.disk-process-block:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.disk-visualization__process:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-.disk-process-header {
+.disk-visualization__process-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
 }
 
-.disk-process-header strong {
-  font-size: 1em;
-  color: #2c3e50;
+.disk-visualization__process-pid {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
 }
 
-.disk-page-count {
-  background: rgba(52, 152, 219, 0.15);
-  color: #2980b9;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.85em;
+.disk-visualization__process-count {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
   font-weight: 600;
 }
 
-.disk-page-numbers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
+/* Pages */
+.disk-visualization__pages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: var(--spacing-xs);
 }
 
-.disk-page-number {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-family: 'Courier New', monospace;
-  color: #555;
-  font-weight: 500;
+.disk-visualization__page {
+  padding: var(--spacing-xs);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
 }
 
-/* Scrollbar para el contenido del disco */
-.disk-content::-webkit-scrollbar {
-  width: 6px;
+.disk-visualization__page:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: scale(1.05);
 }
 
-.disk-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+.disk-visualization__page--more {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border-style: dashed;
+  font-style: italic;
 }
 
-.disk-content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-}
-
-.disk-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* Animación para páginas que entran al disco */
-@keyframes slideInDisk {
+/* Animations */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -139,6 +187,13 @@
   }
 }
 
-.disk-process-block {
-  animation: slideInDisk 0.3s ease;
+/* Responsive */
+@media (max-width: 768px) {
+  .disk-visualization {
+    padding: var(--spacing-md);
+  }
+
+  .disk-visualization__pages {
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+  }
 }

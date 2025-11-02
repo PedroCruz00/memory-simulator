@@ -1,0 +1,106 @@
+/* Global icon styles */
+.icon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Icon container utilities */
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-md {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-lg {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-xl {
+  width: 40px;
+  height: 40px;
+}
+
+/* Icon animations */
+.icon-spin {
+  animation: iconSpin 2s linear infinite;
+}
+
+.icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+.icon-bounce {
+  animation: iconBounce 1s ease infinite;
+}
+
+@keyframes iconSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Icon colors */
+.icon-primary {
+  color: var(--primary-purple);
+}
+
+.icon-secondary {
+  color: var(--secondary-blue);
+}
+
+.icon-success {
+  color: var(--success-green);
+}
+
+.icon-danger {
+  color: var(--danger-red);
+}
+
+.icon-warning {
+  color: var(--warning-amber);
+}
+
+.icon-info {
+  color: var(--accent-cyan);
+}
+
+.icon-muted {
+  color: var(--text-muted);
+}
