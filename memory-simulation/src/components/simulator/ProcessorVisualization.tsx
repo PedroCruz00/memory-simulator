@@ -25,6 +25,17 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
 }) => {
   const { currentProcess, readyQueue, blockedQueue } = processor;
 
+  // Debug: Verificar el historial del proceso actual
+  React.useEffect(() => {
+    if (currentProcess) {
+      console.log(`[ProcessorVisualization] Process P${currentProcess.pid}:`, {
+        state: currentProcess.state,
+        historyLength: currentProcess.stateHistory.length,
+        history: currentProcess.stateHistory,
+      });
+    }
+  }, [currentProcess]);
+
   return (
     <div className="processor-visualization">
       <div className="processor-visualization__header">
@@ -104,6 +115,69 @@ export const ProcessorVisualization: React.FC<ProcessorVisualizationProps> = ({
               <span>{(currentProcess.memorySize / 1024).toFixed(1)} KB</span>
               <span className="processor-visualization__separator">|</span>
               <span>{currentProcess.pages.length} páginas</span>
+            </div>
+
+            {/* Timeline del historial de estados */}
+            <div className="processor-visualization__state-timeline">
+              <div className="processor-visualization__timeline-header">
+                <Icons.Clock />
+                <span>
+                  Historial de Estados ({currentProcess.stateHistory.length})
+                </span>
+              </div>
+              <div className="processor-visualization__timeline-items">
+                {currentProcess.stateHistory.length === 0 ? (
+                  <div className="processor-visualization__timeline-empty">
+                    Sin historial disponible
+                  </div>
+                ) : (
+                  currentProcess.stateHistory.map((entry, index) => {
+                    const stateColor =
+                      entry.state === "NEW"
+                        ? "var(--state-new)"
+                        : entry.state === "READY"
+                        ? "var(--state-ready)"
+                        : entry.state === "RUNNING"
+                        ? "var(--state-running)"
+                        : entry.state === "BLOCKED"
+                        ? "var(--state-blocked)"
+                        : "var(--state-terminated)";
+
+                    return (
+                      <div
+                        key={index}
+                        className="processor-visualization__timeline-item"
+                      >
+                        <div
+                          className="processor-visualization__timeline-marker"
+                          style={{ backgroundColor: stateColor }}
+                        />
+                        <div className="processor-visualization__timeline-content">
+                          <div className="processor-visualization__timeline-state">
+                            {entry.state}
+                          </div>
+                          <div className="processor-visualization__timeline-meta">
+                            <span className="processor-visualization__timeline-time">
+                              {entry.timestamp.toLocaleTimeString()}
+                            </span>
+                            {entry.timeInPreviousState !== undefined && (
+                              <span className="processor-visualization__timeline-duration">
+                                ({Math.round(entry.timeInPreviousState / 1000)}
+                                s)
+                              </span>
+                            )}
+                          </div>
+                          {entry.reason && (
+                            <div className="processor-visualization__timeline-reason">
+                              {entry.reason}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
         ) : (

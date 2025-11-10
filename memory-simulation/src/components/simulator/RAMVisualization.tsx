@@ -13,18 +13,21 @@ import React from "react";
 import { Icons } from "../Icons";
 import { RAM } from "../../models/RAM";
 import { Process } from "../../models/Process";
+import type { MMUEvent } from "../../models/MMU";
 import "../../styles/RAMVisualization.css";
 
 interface RAMVisualizationProps {
   ram: RAM;
   processes: Process[];
   clockPointer: number;
+  lastEvent?: MMUEvent | null;
 }
 
 export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
   ram,
   processes,
   clockPointer,
+  lastEvent,
 }) => {
   const occupiedFrames = ram.frames.filter((f) => f !== null).length;
   const utilizationPercent = (occupiedFrames / ram.numFrames) * 100;
@@ -79,6 +82,10 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
           {ram.frames.map((frame, index) => {
             const isPointed = index === clockPointer;
             const isOccupied = frame !== null;
+            const isAccessed =
+              lastEvent &&
+              lastEvent.frameNumber === index &&
+              (lastEvent.type === "PAGE_HIT" || lastEvent.type === "PAGE_LOAD");
 
             return (
               <div
@@ -89,7 +96,7 @@ export const RAMVisualization: React.FC<RAMVisualizationProps> = ({
                     : "ram-visualization__frame--free"
                 } ${
                   isPointed ? "ram-visualization__frame--clock-pointer" : ""
-                }`}
+                } ${isAccessed ? "ram-visualization__frame--accessed" : ""}`}
                 style={{
                   borderColor: isOccupied
                     ? getProcessColor(frame.processPid)

@@ -23,7 +23,7 @@
 - ✅ **Desbloqueos más rápidos**: 60% probabilidad
 - ✅ **Tiempo observable**: Procesos de 4-10simulador interactivo y visual de gestión de memoria virtual con paginación y algoritmo Clock
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
 ![React](https://img.shields.io/badge/React-18.3-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)
 ![Status](https://img.shields.io/badge/status-fully_functional-success.svg)

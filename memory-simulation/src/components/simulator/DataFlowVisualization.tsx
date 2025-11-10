@@ -88,6 +88,11 @@ export const DataFlowVisualization: React.FC<DataFlowVisualizationProps> = ({
             <Icons.CPU />
           </div>
           <span className="data-flow-visualization__node-label">CPU</span>
+          {processor.currentProcess && (
+            <div className="data-flow-visualization__node-badge data-flow-visualization__node-badge--process">
+              P{processor.currentProcess.pid}
+            </div>
+          )}
         </div>
 
         {/* Arrow CPU to MMU */}

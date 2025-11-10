@@ -142,6 +142,17 @@
   box-shadow: var(--shadow-md);
 }
 
+.data-flow-visualization__node-badge--process {
+  background: var(--success-green);
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  font-size: 0.875rem;
+  width: 32px;
+  height: 32px;
+  top: -12px;
+  right: -12px;
+}
+
 .data-flow-visualization__node-info {
   position: absolute;
   bottom: -24px;

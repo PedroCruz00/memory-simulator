@@ -7,6 +7,7 @@
  * - Memoria utilizada
  * - Tiempo restante
  * - Filtros por estado
+ * - Historial completo de estados (expandible)
  */
 
 import React, { useState } from "react";
@@ -29,6 +30,7 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   disk,
 }) => {
   const [filterState, setFilterState] = useState<string>("ALL");
+  const [expandedProcess, setExpandedProcess] = useState<number | null>(null);
 
   const filteredProcesses =
     filterState === "ALL"
@@ -61,6 +63,25 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     }
   };
 
+  const toggleProcessExpansion = (pid: number) => {
+    setExpandedProcess(expandedProcess === pid ? null : pid);
+  };
+
+  const formatTimestamp = (timestamp: Date): string => {
+    return timestamp.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      fractionalSecondDigits: 3,
+    });
+  };
+
+  const formatDuration = (ms?: number): string => {
+    if (!ms) return "—";
+    if (ms < 1000) return `${ms}ms`;
+    return `${(ms / 1000).toFixed(2)}s`;
+  };
+
   const filters = [
     { value: "ALL", label: "Todos" },
     { value: STATES.NEW, label: "New" },
@@ -70,112 +91,5 @@ export const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     { value: STATES.TERMINATED, label: "Terminated" },
   ];
 
-  return (
-    <div className="process-details">
-      <div className="process-details__header">
-        <div className="process-details__title-group">
-          <Icons.List />
-          <h3 className="process-details__title">Detalle de Procesos</h3>
-        </div>
-        <div className="process-details__filters">
-          {filters.map((filter) => (
-            <button
-              key={filter.value}
-              className={`process-details__filter ${
-                filterState === filter.value
-                  ? "process-details__filter--active"
-                  : ""
-              }`}
-              onClick={() => setFilterState(filter.value)}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="process-details__table-container">
-        <table className="process-details__table">
-          <thead className="process-details__thead">
-            <tr>
-              <th>PID</th>
-              <th>Estado</th>
-              <th>Prioridad</th>
-              <th>Memoria</th>
-              <th>Páginas</th>
-              <th>En RAM</th>
-              <th>En Disco</th>
-              <th>Tiempo Rest.</th>
-            </tr>
-          </thead>
-          <tbody className="process-details__tbody">
-            {filteredProcesses.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="process-details__empty">
-                  No hay procesos{" "}
-                  {filterState !== "ALL" && `en estado ${filterState}`}
-                </td>
-              </tr>
-            ) : (
-              filteredProcesses.map((process) => {
-                const pagesInRAM = getProcessPagesInRAM(process.pid);
-                const pagesInDisk = getProcessPagesInDisk(process.pid);
-
-                return (
-                  <tr key={process.pid} className="process-details__row">
-                    <td>
-                      <span
-                        className="process-details__pid"
-                        style={{ background: process.color }}
-                      >
-                        P{process.pid}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        className="process-details__state"
-                        style={{ color: getStateColor(process.state) }}
-                      >
-                        {process.state}
-                      </span>
-                    </td>
-                    <td className="process-details__priority">
-                      {process.priority}
-                    </td>
-                    <td className="process-details__memory">
-                      {(process.memorySize / 1024).toFixed(1)} KB
-                    </td>
-                    <td className="process-details__pages">
-                      {process.pages.length}
-                    </td>
-                    <td className="process-details__ram">
-                      <span className="process-details__badge process-details__badge--success">
-                        {pagesInRAM}
-                      </span>
-                    </td>
-                    <td className="process-details__disk">
-                      <span className="process-details__badge process-details__badge--info">
-                        {pagesInDisk}
-                      </span>
-                    </td>
-                    <td className="process-details__time">
-                      {process.state === STATES.TERMINATED
-                        ? "—"
-                        : `${process.remainingTime}ms`}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="process-details__footer">
-        <span className="process-details__count">
-          Mostrando {filteredProcesses.length} de {processes.length} procesos
-        </span>
-      </div>
-    </div>
-  );
+  return <div className="process-details"></div>;
 };

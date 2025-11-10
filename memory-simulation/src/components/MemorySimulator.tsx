@@ -25,6 +25,8 @@ import { MetricsDashboard } from "./simulator/MetricsDashboard";
 import { ProcessDetails } from "./simulator/ProcessDetails";
 import { DataFlowVisualization } from "./simulator/DataFlowVisualization";
 import { ProcessFlowDiagram } from "./simulator/ProcessFlowDiagram";
+import { EventHistory } from "./simulator/EventHistory";
+import { ProcessHistoryLog } from "./simulator/ProcessHistoryLog";
 import type { MMUEvent } from "../models/MMU";
 import "../styles/SimulatorLayout.css";
 
@@ -122,6 +124,7 @@ export const MemorySimulator: React.FC = () => {
                 ram={state.ram}
                 processes={state.processes}
                 clockPointer={state.processor.mmu.clock.getPointer()}
+                lastEvent={lastEvent}
               />
             </div>
 
@@ -151,6 +154,19 @@ export const MemorySimulator: React.FC = () => {
               ram={state.ram}
               disk={state.disk}
             />
+          </div>
+
+          {/* Historial de Eventos */}
+          <div className="simulator-history-container">
+            <EventHistory
+              events={state.processor.mmu.eventHistory}
+              maxEvents={100}
+            />
+          </div>
+
+          {/* Registro Completo de Transiciones de Estados */}
+          <div className="simulator-history-log-container">
+            <ProcessHistoryLog processes={state.processes} />
           </div>
 
           <div className="simulator-details-container">
